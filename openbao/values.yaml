@@ -24,10 +24,13 @@ data:
         hosts:
           - host: openbao.ocf.berkeley.edu
             paths: []
+          - host: bao.ocf.berkeley.edu
+            paths: []
         tls:
           - secretName: openbao-ingress-tls
             hosts: 
               - openbao.ocf.berkeley.edu
+              - bao.ocf.berkeley.edu
       #volumes:
       #  - name: openbao-server-tls
       #    secret:

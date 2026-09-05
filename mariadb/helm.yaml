@@ -1,0 +1,99 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mariadb
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: mariadb
+  namespace: mariadb
+spec:
+  type: "oci"
+  interval: 15m
+  url: oci://ghcr.io/mariadb-operator/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mariadb-operator-crds
+  namespace: mariadb
+spec:
+  interval: 15m
+  timeout: 5m
+  chart:
+    spec:
+      chart: mariadb-operator-crds
+      version: '26.6.0'
+      sourceRef:
+        kind: HelmRepository
+        name: mariadb
+      interval: 5m
+  releaseName: mariadb-operator-crds
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mariadb-operator
+  namespace: mariadb
+spec:
+  interval: 15m
+  timeout: 5m
+  chart:
+    spec:
+      chart: mariadb-operator
+      version: '26.6.0'
+      sourceRef:
+        kind: HelmRepository
+        name: mariadb
+      interval: 5m
+  valuesFrom:
+    - kind: ConfigMap
+      name: mariadb-operator-values
+  releaseName: mariadb-operator
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mariadb-cluster
+  namespace: mariadb
+spec:
+  interval: 15m
+  timeout: 5m
+  chart:
+    spec:
+      chart: mariadb-cluster
+      version: '26.6.0'
+      sourceRef:
+        kind: HelmRepository
+        name: mariadb
+      interval: 5m
+  valuesFrom:
+    - kind: ConfigMap
+      name: mariadb-cluster-values
+  releaseName: mariadb-cluster
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+

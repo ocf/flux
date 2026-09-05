@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-operator-values
+  namespace: mariadb
+  labels:
+    reconcile.fluxcd.io/watch: Enabled
+data:
+  values.yaml: |
+    ha:
+      enabled: true
+      replicas: 3
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - mariadb-operator
+            - key: app.kubernetes.io/instance
+              operator: In
+              values:
+              - mariadb-operator
+          topologyKey: kubernetes.io/hostname
+    pdb:
+      enabled: true
+      maxUnavailable: 1
+

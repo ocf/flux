@@ -8,10 +8,10 @@ metadata:
 spec:
   interval: 1m0s
   ref:
-    branch: main
+    branch: labmap2
   secretRef:
     name: flux-system
-  url: ssh://git@github.com/ocf/flux
+  url: ssh://git@github.com/ocf/flux.git
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

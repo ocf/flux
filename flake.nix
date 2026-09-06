@@ -27,6 +27,10 @@
             age
             age-plugin-yubikey
           ];
+
+          shellHook = ''
+            export SOPS_AGE_KEY_CMD="age-plugin-yubikey -i"
+          '';
         };
       });
     };

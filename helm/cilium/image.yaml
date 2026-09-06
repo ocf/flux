@@ -33,7 +33,7 @@ spec:
       author:
         email: ocfbot@ocf.berkeley.edu
         name: ocfbot
-      messageTemplate: '{{ .AutomationObject }}: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
+      messageTemplate: '{{ .AutomationObject.Name }}: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
       signingKey:
         secretRef:
           name: automation-signing-key

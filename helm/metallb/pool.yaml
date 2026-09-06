@@ -1,0 +1,18 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: pool-1
+  namespace: metallb
+spec:
+  addresses:
+  - "169.229.226.81-169.229.226.89"
+  - "2607:f140:8801::1:81-2607:f140:8801::1:89"
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: pool-1
+  namespace: metallb
+spec:
+  ipAddressPools:
+  - pool-1

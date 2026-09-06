@@ -23,11 +23,6 @@ spec:
       version: 1.47.0
   interval: 10m0s
   values:
-    prometheus:
-      monitor:
-        enabled: true
-      service:
-        enabled: true
     service:
       clusterIP: 10.96.0.10
     serviceAccount:

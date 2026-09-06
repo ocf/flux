@@ -1,0 +1,84 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: cluster
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: staging
+  secretRef:
+    name: flux-system
+  url:
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./cluster/staging
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: cluster
+  patches:
+    - target: # patch all kustomizations
+        kind: Kustomization 
+      patch: |
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: ignored
+        spec:
+          decryption:
+            provider: sops
+          patches:
+            - target:
+                kind: ImageUpdateAutomation
+              patch: |
+                apiVersion: image.toolkit.fluxcd.io/v1
+                kind: ImageUpdateAutomation
+                metadata:
+                  name: ignored
+                spec:
+                  git:
+                    checkout:
+                      ref:
+                        branch: main
+                    commit:
+                      author:
+                        email: "ocfbot@ocf.berkeley.edu"
+                        name: ocfbot
+                      messageTemplate: "{{ .AutomationObject.Name }}: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}"
+                      signingKey:
+                        secretRef:
+                          name: automation-signing-key
+                        type: ssh
+                    push:
+                      branch: automation
+                  interval: 30m0s
+                  sourceRef:
+                    kind: GitRepository
+                    name: cluster
+                    namespace: flux-system
+    - target: # patch helm chart kustomizations
+        kind: Kustomization
+        name: helm.*
+      patch: |
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: ignored
+        spec:
+          patches:
+            - target: # patch services to have appropriate annotations
+                kind: Service
+              patch: |
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: ignored
+                  annotations:
+                    placeholder: placeholder

@@ -1,0 +1,46 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: cilium
+  namespace: flux-system
+spec:
+  image: quay.io/cilium/charts/cilium
+  interval: 5m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: cilium
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: cilium
+  policy:
+    semver:
+      range: '>=1.0.0'
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageUpdateAutomation
+metadata:
+  name: cilium
+  namespace: flux-system
+spec:
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: ocfbot@ocf.berkeley.edu
+        name: ocfbot
+      messageTemplate: '{{ .AutomationObject }}: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
+      signingKey:
+        secretRef:
+          name: automation-signing-key
+        type: ssh
+    push:
+      branch: automation
+  interval: 30m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

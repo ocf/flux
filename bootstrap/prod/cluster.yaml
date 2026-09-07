@@ -18,7 +18,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./cluster/prod
+  path: ./cluster/prod/ks
   prune: true
   sourceRef:
     kind: GitRepository
@@ -63,7 +63,7 @@ spec:
                     kind: GitRepository
                     name: cluster
                     namespace: flux-system
-      - target: # patch helm chart kustomizations
+    - target: # patch helm chart kustomizations
         kind: Kustomization
         name: helm.*
       patch: |

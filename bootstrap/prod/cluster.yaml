@@ -63,22 +63,3 @@ spec:
                     kind: GitRepository
                     name: cluster
                     namespace: flux-system
-    - target: # patch helm chart kustomizations
-        kind: Kustomization
-        name: helm.*
-      patch: |
-        apiVersion: kustomize.toolkit.fluxcd.io/v1
-        kind: Kustomization
-        metadata:
-          name: ignored
-        spec:
-          patches:
-            - target: # patch services to have appropriate annotations
-                kind: Service
-              patch: |
-                apiVersion: v1
-                kind: Service
-                metadata:
-                  name: ignored
-                  annotations:
-                    placeholder: placeholder

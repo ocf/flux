@@ -18,7 +18,7 @@ spec:
         envFrom:
         - secretRef:
             name: prometheus-secret
-        image: ghcr.io/ocf/labmap2-backend:latest # {"$imagepolicy": "flux-system:labmap-backend"}
+        image: ghcr.io/ocf/labmap2-backend:b6cdb9289f0d11569f9384f8f2857657b2ba0edd # {"$imagepolicy": "flux-system:labmap-backend"}
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 6
@@ -57,7 +57,7 @@ spec:
         ocf.berkeley.edu/flux: labmap-frontend
     spec:
       containers:
-      - image: ghcr.io/ocf/labmap2-frontend:latest # {"$imagepolicy": "flux-system:labmap-frontend"}
+      - image: ghcr.io/ocf/labmap2-frontend:b6cdb9289f0d11569f9384f8f2857657b2ba0edd # {"$imagepolicy": "flux-system:labmap-frontend"}
         imagePullPolicy: IfNotPresent
         name: main
         ports:

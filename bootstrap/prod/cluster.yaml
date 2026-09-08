@@ -50,31 +50,3 @@ spec:
                     io.cilium/websocket: enabled
                     kubernetes.io/tls-acme: 'true'
                     projectcontour.io/websocket-routes: /
-            - target:
-                kind: ImageUpdateAutomation
-              patch: |
-                apiVersion: image.toolkit.fluxcd.io/v1
-                kind: ImageUpdateAutomation
-                metadata:
-                  name: ignored
-                spec:
-                  git:
-                    checkout:
-                      ref:
-                        branch: main
-                    commit:
-                      author:
-                        email: ocfbot@ocf.berkeley.edu
-                        name: ocfbot
-                      messageTemplate: '{{ .AutomationObject.Name }}: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
-                      signingKey:
-                        secretRef:
-                          name: automation-signing-key
-                        type: ssh
-                    push:
-                      branch: automation
-                  interval: 30m0s
-                  sourceRef:
-                    kind: GitRepository
-                    name: cluster
-                    namespace: flux-system

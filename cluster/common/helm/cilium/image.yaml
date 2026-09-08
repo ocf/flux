@@ -18,9 +18,3 @@ spec:
   policy:
     semver:
       range: '>=1.0.0'
----
-apiVersion: image.toolkit.fluxcd.io/v1
-kind: ImageUpdateAutomation
-metadata:
-  name: cilium
-  namespace: flux-system

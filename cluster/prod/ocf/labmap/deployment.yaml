@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: labmap-backend
+  namespace: labmap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ocf.berkeley.edu/flux: labmap-backend
+  template:
+    metadata:
+      labels:
+        ocf.berkeley.edu/flux: labmap-backend
+    spec:
+      containers:
+      - env: []
+        envFrom:
+        - secretRef:
+            name: prometheus-secret
+        image: ghcr.io/ocf/labmap2-backend:latest # {"$imagepolicy": "flux-system:labmap-backend"}
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          timeoutSeconds: 3
+        name: main
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      dnsConfig:
+        searches:
+        - ocf.berkeley.edu
+      dnsPolicy: ClusterFirst
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: labmap-frontend
+  namespace: labmap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ocf.berkeley.edu/flux: labmap-frontend
+  template:
+    metadata:
+      labels:
+        ocf.berkeley.edu/flux: labmap-frontend
+    spec:
+      containers:
+      - image: ghcr.io/ocf/labmap2-frontend:latest # {"$imagepolicy": "flux-system:labmap-frontend"}
+        imagePullPolicy: IfNotPresent
+        name: main
+        ports:
+        - containerPort: 8080
+      dnsConfig:
+        searches:
+        - ocf.berkeley.edu
+      dnsPolicy: ClusterFirst

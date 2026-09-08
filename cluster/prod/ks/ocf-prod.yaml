@@ -1,0 +1,12 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ocf-prod
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./cluster/prod/ocf
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: cluster

@@ -23,6 +23,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: cluster
+  decryption:
+    provider: sops
   patches:
     - target: # patch all kustomizations
         kind: Kustomization 

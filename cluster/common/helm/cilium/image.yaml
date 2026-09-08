@@ -2,7 +2,7 @@ apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageRepository
 metadata:
   name: cilium
-  namespace: cilium
+  namespace: flux-system
 spec:
   image: quay.io/cilium/charts/cilium
   interval: 5m0s
@@ -11,7 +11,7 @@ apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImagePolicy
 metadata:
   name: cilium
-  namespace: cilium
+  namespace: flux-system
 spec:
   imageRepositoryRef:
     name: cilium
@@ -23,4 +23,4 @@ apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageUpdateAutomation
 metadata:
   name: cilium
-  namespace: cilium
+  namespace: flux-system

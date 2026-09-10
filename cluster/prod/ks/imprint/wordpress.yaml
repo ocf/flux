@@ -29,7 +29,7 @@ spec:
     provider: sops
   patches:
     - target: # patch site kustomization to patch ingress
-        Kind: Kustomization
+        kind: Kustomization
       patch: |
         apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization

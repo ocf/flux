@@ -1,8 +1,8 @@
 {
-  description = "A very basic flake";
+  description = "OCF Flux manifests";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
     systems.url = "github:nix-systems/default/main";
   };
 

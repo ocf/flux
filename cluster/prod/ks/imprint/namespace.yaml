@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: imprint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: wordpress

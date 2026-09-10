@@ -8,6 +8,8 @@ spec:
   ref:
     branch: main
   url: ssh://git@github.com/ocf/imprint
+  secretRef:
+    name: imprint-deploy-key
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
@@ -19,3 +21,5 @@ spec:
   ref:
     branch: main
   url: ssh://git@github.com/ocf/imprint-sites
+  secretRef:
+    name: imprint-sites-deploy-key

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: grafana
+spec:
+  replicas: 1 # FIXME
+  selector:
+    matchLabels:
+      ocf.berkeley.edu/flux: grafana
+  template:
+    metadata:
+      labels:
+        ocf.berkeley.edu/flux: grafana
+    spec:
+      containers:
+      - env: []
+        envFrom:
+        - configMapRef:
+            name: grafana
+        - secretRef:
+            name: grafana
+        image: ghcr.io/ocf/grafana:8997623e88941766382b6e8ee14f87d840d95b29
+        imagePullPolicy: IfNotPresent
+        name: main
+        ports:
+        - containerPort: 3000

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana
+  namespace: grafana
+data:
+  GF_DATABASE_HOST: mysql
+  GF_DATABASE_NAME: ocfgrafana
+  GF_DATABASE_TYPE: mysql
+  GF_DATABASE_USER: ocfgrafana
+  GF_SERVER_ROOT_URL: https://grafana.ocf.berkeley.edu/
+  GF_SESSION_COOKIE_SECURE: 'true'
+  GF_SESSION_PROVIDER: mysql
+  PROMETHEUS_AUTH_USER: ocfadmin

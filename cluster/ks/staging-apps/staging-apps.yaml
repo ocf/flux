@@ -16,6 +16,8 @@ spec:
     # allow specific apps
     !/cluster/apps
     /cluster/apps/*
+    !/cluster/apps/vaultwarden
+    !/cluster/apps/snapshot-controller
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

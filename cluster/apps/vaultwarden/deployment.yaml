@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ocf.berkeley.edu/flux: vaultwarden
+  template:
+    metadata:
+      labels:
+        ocf.berkeley.edu/flux: vaultwarden
+    spec:
+      containers:
+      - env:
+        - name: SIGNUPS_ALLOWED
+          value: "false"
+        - name: DOMAIN
+          value: "https://vaultwarden.ocf.berkeley.edu"
+        - name: ORG_CREATION_USERS
+          value: none
+        - name: SSO_ENABLED
+          value: "true"
+        - name: SSO_ONLY
+          value: "true"
+        - name: SSO_AUTHORITY
+          value: "https://idm.ocf.berkeley.edu/realms/ocf"
+        - name: SSO_CLIENT_ID
+          value: "vaultwarden"
+        envFrom:
+        - secretRef:
+            name: vaultwarden
+        volumeMounts:
+        - mountPath: "/data"
+          name: vaultwarden-data
+        image: vaultwarden/server:1.37.3
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /alive
+            port: 80
+          initialDelaySeconds: 10
+          timeoutSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /alive
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        name: main
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: vaultwarden-data
+        persistentVolumeClaim:
+          claimName: vaultwarden-data
+      dnsConfig:
+        searches:
+        - ocf.berkeley.edu
+      dnsPolicy: ClusterFirst
+

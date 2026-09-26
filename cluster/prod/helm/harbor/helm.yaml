@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: harbor
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: harbor
+  namespace: harbor
+spec:
+  url: https://helm.goharbor.io
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: harbor
+  namespace: harbor
+spec:
+  chart:
+    spec:
+      chart: harbor
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: harbor
+      version: 2.15.2
+  values:
+    expose:
+      type: ingress
+      tls:
+        enabled: false
+        certSource: secret
+        secret:
+          secretName: harbor-ingress-tls
+      ingress:
+        hosts:
+          core: registry.ocf.berkeley.edu
+        annotations: |
+          cert-manager.io/cluster-issuer: letsencrypt
+          ingress.kubernetes.io/force-ssl-redirect: "true"
+          kubernetes.io/ingress.class: contour
+          kubernetes.io/tls-acme: "true"
+    externalURL: "https://registry.ocf.berkeley.edu"
+    persistence:
+      persistentVolumeClaim:
+        registry:
+          storageClass: rbd-nvme
+        jobservice:
+          jobLog:
+            storageClass: rbd-nvme
+      imageChartStorage:
+        type: filesystem
+        filesystem:
+          rootdirectory: /storage
+    existingSecretAdminPassword: harbor-secrets
+    existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
+    core:
+      extraEnvVars:
+        - name: CONFIG_OVERWRITE_JSON
+          valueFrom:
+            secretKeyRef:
+              name: harbor-secrets
+              key: CONFIG_OVERWRITE_JSON

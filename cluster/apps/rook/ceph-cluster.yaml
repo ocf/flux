@@ -1,0 +1,38 @@
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: ceph
+  namespace: rook
+spec:
+  cephVersion:
+    image: quay.io/ceph/ceph:v20.2.1
+  dashboard:
+    enabled: true
+  dataDirHostPath: /var/lib/rook
+  mon:
+    allowMultiplePerNode: false
+    count: 3
+  storage:
+    nodes:
+    - devices:
+      - config:
+          deviceClass: ssd
+        name: /dev/disk/by-path/pci-0000:09:01.0-scsi-0:0:0:0
+      name: marecrisium
+    - devices:
+      - config:
+          deviceClass: ssd
+        name: /dev/disk/by-path/pci-0000:09:01.0-scsi-0:0:0:0
+      name: krunmacula
+    - devices:
+      - config:
+          deviceClass: ssd
+        name: /dev/disk/by-path/pci-0000:09:01.0-scsi-0:0:0:0
+      name: stringofpearls
+    - devices:
+      - config:
+          deviceClass: ssd
+        name: /dev/disk/by-path/pci-0000:09:01.0-scsi-0:0:0:0
+      name: losulci
+    useAllDevices: false
+    useAllNodes: false

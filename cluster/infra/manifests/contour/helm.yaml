@@ -37,10 +37,11 @@ spec:
       retries: 3
   test:
     enable: true
+  valuesFrom: # you must override these on a per-cluster basis
+    - kind: ConfigMap
+      name: values
   values:
     envoy:
       resourcesPreset: large
       service:
-        annotations:
-          metallb.universe.tf/loadBalancerIPs: "169.229.226.81,2607:f140:8801::1:81"
         ipFamilyPolicy: PreferDualStack

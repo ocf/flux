@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: grafana
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    ocf.berkeley.edu/flux: grafana

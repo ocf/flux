@@ -13,11 +13,11 @@ spec:
   ignore: |
     # exclude all
     /*
-    # allow staging/apps
-    !/staging/apps
     # exclude apps by default
-    /staging/apps/*
+    !/cluster/apps
+    /cluster/apps/*
     # allow specific apps
+    !/cluster/apps/keycloak
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

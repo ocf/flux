@@ -9,7 +9,7 @@ metadata:
   name: metallb
   namespace: metallb
 spec:
-  interval: 10m0s
+  interval: 15m0s
   url: https://metallb.github.io/metallb
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -18,12 +18,22 @@ metadata:
   name: metallb
   namespace: metallb
 spec:
+  interval: 15m0s
+  timeout: 5m0s
   chart:
     spec:
       chart: metallb
+      version: 0.16.1
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: metallb
-      version: 0.16.1
-  interval: 10m0s
+  releaseName: metallb
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true

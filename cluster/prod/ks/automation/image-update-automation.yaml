@@ -1,7 +1,7 @@
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageUpdateAutomation
 metadata:
-  name: image-update
+  name: prod
   namespace: flux-system
 spec:
   git:

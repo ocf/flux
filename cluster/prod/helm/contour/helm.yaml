@@ -9,7 +9,7 @@ metadata:
   name: contour
   namespace: contour
 spec:
-  interval: 10m0s
+  interval: 15m0s
   url: https://projectcontour.github.io/helm-charts
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -18,15 +18,25 @@ metadata:
   name: contour
   namespace: contour
 spec:
+  interval: 15m0s
+  timeout: 5m0s
   chart:
     spec:
       chart: contour
+      version: 0.7.0
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: contour
-      version: 0.7.0
-  interval: 10m0s
+  releaseName: contour
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
   values:
     envoy:
       resourcesPreset: large

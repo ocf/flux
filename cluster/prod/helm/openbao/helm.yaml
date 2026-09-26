@@ -9,7 +9,7 @@ metadata:
   name: openbao
   namespace: openbao
 spec:
-  interval: 15m
+  interval: 15m0s
   url: https://openbao.github.io/openbao-helm
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -18,19 +18,16 @@ metadata:
   name: openbao
   namespace: openbao
 spec:
-  interval: 15m
-  timeout: 5m
+  interval: 15m0s
+  timeout: 5m0s
   chart:
     spec:
       chart: openbao
       version: '0.29.4'
+      reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: openbao
-      interval: 5m
-  valuesFrom:
-    - kind: ConfigMap
-      name: openbao-values
   releaseName: openbao
   install:
     remediation:
@@ -40,4 +37,7 @@ spec:
       retries: 3
   test:
     enable: true
-
+  valuesFrom:
+    - kind: ConfigMap
+      name: openbao-values
+ 

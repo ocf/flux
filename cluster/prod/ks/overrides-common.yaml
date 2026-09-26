@@ -1,11 +1,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: helm-common
+  name: overrides-common
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./cluster/common/helm
+  path: ./cluster/common/overrides/prod
   prune: true
   sourceRef:
     kind: GitRepository

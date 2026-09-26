@@ -11,6 +11,19 @@ spec:
     name: flux-system
   url: ssh://git@github.com/ocf/flux
 ---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: cluster-staging
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: staging
+  secretRef:
+    name: flux-system
+  url: ssh://git@github.com/ocf/flux
+---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -18,21 +31,10 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./cluster/staging/ks
+  path: ./cluster/ks/staging
   prune: true
   sourceRef:
     kind: GitRepository
     name: cluster
   decryption:
     provider: sops
-  patches:
-    - target: # patch all kustomizations
-        kind: Kustomization 
-      patch: |
-        apiVersion: kustomize.toolkit.fluxcd.io/v1
-        kind: Kustomization
-        metadata:
-          name: ignored
-        spec:
-          decryption:
-            provider: sops 

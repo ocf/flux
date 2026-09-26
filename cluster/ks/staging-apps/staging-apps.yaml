@@ -1,0 +1,47 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: cluster-staging-apps
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: staging
+  secretRef:
+    name: flux-system
+  url: ssh://git@github.com/ocf/flux
+  ignore: |
+    # exclude all
+    /*
+    # allow staging/apps
+    !/staging/apps
+    # exclude apps by default
+    /staging/apps/*
+    # allow specific apps
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: staging-apps
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./cluster/apps
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: cluster-staging-apps
+  patches:
+  - target:
+      kind: Ingress
+    patch: |
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: ignored
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt
+          ingress.kubernetes.io/force-ssl-redirect: 'true'
+          io.cilium/websocket: enabled
+          kubernetes.io/tls-acme: 'true'
+          projectcontour.io/websocket-routes: /

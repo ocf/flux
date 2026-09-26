@@ -1,11 +1,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: overrides-common
+  name: overrides
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./cluster/common/overrides/staging
+  path: ./cluster/infra/overrides/prod
   prune: true
   sourceRef:
     kind: GitRepository

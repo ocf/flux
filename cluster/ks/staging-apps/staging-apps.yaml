@@ -13,6 +13,9 @@ spec:
   ignore: |
     # exclude all
     /*
+    # allow specific apps
+    !/cluster/apps
+    /cluster/apps/*
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

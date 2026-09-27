@@ -8,3 +8,7 @@ metadata:
 data:
   values.yaml: |
     k8sServiceHost: gravitywell.ocf.berkeley.edu
+    ingressController:
+      service:
+        annotations:
+         metallb.universe.tf/loadBalancerIPs: "169.229.226.105,2607:f140:8801::1:105"

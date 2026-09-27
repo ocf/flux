@@ -2,6 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: o3-ocf-crt
+  namespace: rook
 spec:
   dnsNames:
   - o3.ocf.io

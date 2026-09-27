@@ -2,6 +2,7 @@ apiVersion: ceph.rook.io/v1
 kind: CephObjectStore
 metadata:
   name: rgw-hdd
+  namespace: rook
 spec:
   dataPool:
     deviceClass: hdd

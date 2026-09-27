@@ -2,6 +2,7 @@ apiVersion: ceph.rook.io/v1
 kind: CephFilesystem
 metadata:
   name: cephfs-hybrid
+  namespace: rook
 spec:
   dataPools:
   - deviceClass: nvme

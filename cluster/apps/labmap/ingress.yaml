@@ -4,7 +4,6 @@ metadata:
   name: labmap-backend
   namespace: labmap
 spec:
-  ingressClassName: contour
   rules:
   - host: labmap.ocf.berkeley.edu
     http:
@@ -27,7 +26,6 @@ metadata:
   name: labmap-frontend
   namespace: labmap
 spec:
-  ingressClassName: contour
   rules:
   - host: labmap.ocf.berkeley.edu
     http:

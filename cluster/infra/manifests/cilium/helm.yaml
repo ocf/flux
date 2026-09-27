@@ -56,6 +56,13 @@ spec:
           method: cronJob
       ui:
         enabled: true
+    ingressController:
+      enabled: true
+      default: true
+      enforceHttps: true
+      loadbalancerMode: shared
+    l2announcements:
+      enabled: true
     ipam:
       mode: kubernetes
       requireIPv4PodCIDR: true

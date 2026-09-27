@@ -11,4 +11,4 @@ data:
     ingressController:
       service:
         annotations:
-         metallb.universe.tf/loadBalancerIPs: "169.229.226.105,2607:f140:8801::1:105"
+          lbipam.cilium.io/ips: "169.229.226.105,2607:f140:8801::1:105"

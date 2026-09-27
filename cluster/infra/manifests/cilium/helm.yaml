@@ -60,8 +60,9 @@ spec:
       enabled: true
       default: true
       enforceHttps: true
-      secretsNamespace:
-        create: false
+      loadbalancerMode: shared
+    l2announcements:
+      enabled: true
     ipam:
       mode: kubernetes
       requireIPv4PodCIDR: true

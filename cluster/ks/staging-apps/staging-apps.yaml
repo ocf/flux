@@ -16,8 +16,6 @@ spec:
     # allow specific apps
     !/cluster/apps
     /cluster/apps/*
-    !/cluster/apps/snapshot-controller
-    !/cluster/apps/rook
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

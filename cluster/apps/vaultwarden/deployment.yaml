@@ -31,6 +31,8 @@ spec:
           value: "https://idm.ocf.berkeley.edu/realms/ocf"
         - name: SSO_CLIENT_ID
           value: "vaultwarden"
+        - name: SSO_AUTH_ONLY_NOT_SESSION
+          value: "true"
         envFrom:
         - secretRef:
             name: vaultwarden

@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openbao-values
+  namespace: openbao
+  labels:
+    reconcile.fluxcd.io/watch: Enabled
+data:
+  values.yaml: |
+    global:
+      enabled: true
+      tlsDisable: true
+    server:
+      ingress:
+        enabled: true
+        annotations: |
+          cert-manager.io/cluster-issuer: letsencrypt
+          ingress.kubernetes.io/force-ssl-redirect: "true"
+          kubernetes.io/tls-acme: "true"
+        hosts:
+          - host: openbao.ocf.berkeley.edu
+            paths: []
+          - host: bao.ocf.berkeley.edu
+            paths: []
+        tls:
+          - secretName: openbao-ingress-tls
+            hosts:
+              - openbao.ocf.berkeley.edu
+              - bao.ocf.berkeley.edu
+      standalone:
+        enabled: false
+      ha:
+        enabled: true
+        replicas: 3
+        raft:
+          enabled: true
+          setNodeId: true
+    service:
+      auditStorage:
+        enabled: true
+        storageClass: rbd-nvme
+    injector:
+      enabled: false
+    ui:
+      enabled: true
+      serviceType: LoadBalancer
+    serverTelemetry:
+      serviceMonitor:
+        enabled: true

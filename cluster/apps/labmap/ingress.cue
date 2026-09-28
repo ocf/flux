@@ -1,0 +1,52 @@
+package kube
+
+toplevel: ingress: "labmap-backend": {
+	apiVersion: "networking.k8s.io/v1"
+	kind:       "Ingress"
+	metadata: {
+		name:      "labmap-backend"
+		namespace: "labmap"
+	}
+	spec: {
+		rules: [{
+			host: "labmap.ocf.berkeley.edu"
+			http: paths: [{
+				backend: service: {
+					name: "labmap-backend"
+					port: number: 80
+				}
+				path:     "/api"
+				pathType: "Prefix"
+			}]
+		}]
+		tls: [{
+			hosts: ["labmap.ocf.berkeley.edu"]
+			secretName: "labmap-backend-tls"
+		}]
+	}
+}
+toplevel: ingress: "labmap-frontend": {
+	apiVersion: "networking.k8s.io/v1"
+	kind:       "Ingress"
+	metadata: {
+		name:      "labmap-frontend"
+		namespace: "labmap"
+	}
+	spec: {
+		rules: [{
+			host: "labmap.ocf.berkeley.edu"
+			http: paths: [{
+				backend: service: {
+					name: "labmap-frontend"
+					port: number: 80
+				}
+				path:     "/"
+				pathType: "Exact"
+			}]
+		}]
+		tls: [{
+			hosts: ["labmap.ocf.berkeley.edu"]
+			secretName: "labmap-frontend-tls"
+		}]
+	}
+}

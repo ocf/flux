@@ -1,0 +1,17 @@
+package kube
+
+toplevel: service: vaultwarden: {
+	apiVersion: "v1"
+	kind:       "Service"
+	metadata: {
+		name:      "vaultwarden"
+		namespace: "vaultwarden"
+	}
+	spec: {
+		ports: [{
+			port:       80
+			targetPort: 80
+		}]
+		selector: "ocf.berkeley.edu/flux": "vaultwarden"
+	}
+}

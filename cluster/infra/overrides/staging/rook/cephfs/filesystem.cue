@@ -1,0 +1,28 @@
+package kube
+
+toplevel: cephFilesystem: cephfs: {
+	apiVersion: "ceph.rook.io/v1"
+	kind:       "CephFilesystem"
+	metadata: {
+		name:      "cephfs"
+		namespace: "rook"
+	}
+	spec: {
+		dataPools: [{
+			deviceClass:   "ssd"
+			failureDomain: "host"
+			name:          "ssd"
+			replicated: size: 3
+		}]
+		metadataPool: {
+			deviceClass:   "ssd"
+			failureDomain: "host"
+			replicated: size: 3
+		}
+		metadataServer: {
+			activeCount:   1
+			activeStandby: true
+		}
+		preserveFilesystemOnDelete: true
+	}
+}

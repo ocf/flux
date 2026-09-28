@@ -1,0 +1,20 @@
+package kube
+
+toplevel: kustomization: "staging-apps-secrets": {
+	apiVersion: "kustomize.toolkit.fluxcd.io/v1"
+	kind:       "Kustomization"
+	metadata: {
+		name:      "staging-apps-secrets"
+		namespace: "flux-system"
+	}
+	spec: {
+		interval: "10m0s"
+		path:     "./cluster/secrets/staging-apps"
+		prune:    true
+		sourceRef: {
+			kind: "GitRepository"
+			name: "cluster-staging"
+		}
+		decryption: provider: "sops"
+	}
+}

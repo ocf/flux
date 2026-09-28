@@ -1,0 +1,32 @@
+package kube
+
+toplevel: service: "labmap-backend": {
+	apiVersion: "v1"
+	kind:       "Service"
+	metadata: {
+		name:      "labmap-backend"
+		namespace: "labmap"
+	}
+	spec: {
+		ports: [{
+			port:       80
+			targetPort: 8080
+		}]
+		selector: "ocf.berkeley.edu/flux": "labmap-backend"
+	}
+}
+toplevel: service: "labmap-frontend": {
+	apiVersion: "v1"
+	kind:       "Service"
+	metadata: {
+		name:      "labmap-frontend"
+		namespace: "labmap"
+	}
+	spec: {
+		ports: [{
+			port:       80
+			targetPort: 8080
+		}]
+		selector: "ocf.berkeley.edu/flux": "labmap-frontend"
+	}
+}

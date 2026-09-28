@@ -1,0 +1,50 @@
+package kube
+
+toplevel: clusterIssuer: letsencrypt: {
+	apiVersion: "cert-manager.io/v1"
+	kind:       "ClusterIssuer"
+	metadata: name: "letsencrypt"
+	spec: acme: {
+		email: "root@ocf.berkeley.edu"
+		privateKeySecretRef: name: "letsencrypt"
+		server: "https://acme-v02.api.letsencrypt.org/directory"
+		solvers: [{
+			dns01: {
+				cnameStrategy: "Follow"
+				rfc2136: {
+					nameserver:    "169.229.226.22"
+					tsigAlgorithm: "HMACSHA512"
+					tsigKeyName:   "letsencrypt.ocf.io"
+					tsigSecretSecretRef: {
+						key:  "key"
+						name: "ocf-tsig"
+					}
+				}
+			}
+		}]
+	}
+}
+toplevel: clusterIssuer: "letsencrypt-staging": {
+	apiVersion: "cert-manager.io/v1"
+	kind:       "ClusterIssuer"
+	metadata: name: "letsencrypt-staging"
+	spec: acme: {
+		email: "root@ocf.berkeley.edu"
+		privateKeySecretRef: name: "letsencrypt-staging"
+		server: "https://acme-staging-v02.api.letsencrypt.org/directory"
+		solvers: [{
+			dns01: {
+				cnameStrategy: "Follow"
+				rfc2136: {
+					nameserver:    "169.229.226.22"
+					tsigAlgorithm: "HMACSHA512"
+					tsigKeyName:   "letsencrypt.ocf.io"
+					tsigSecretSecretRef: {
+						key:  "key"
+						name: "ocf-tsig"
+					}
+				}
+			}
+		}]
+	}
+}

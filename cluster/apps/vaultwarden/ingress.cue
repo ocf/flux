@@ -1,0 +1,27 @@
+package kube
+
+toplevel: ingress: vaultwarden: {
+	apiVersion: "networking.k8s.io/v1"
+	kind:       "Ingress"
+	metadata: {
+		name:      "vaultwarden"
+		namespace: "vaultwarden"
+	}
+	spec: {
+		rules: [{
+			host: "vaultwarden.ocf.berkeley.edu"
+			http: paths: [{
+				backend: service: {
+					name: "vaultwarden"
+					port: number: 80
+				}
+				path:     "/"
+				pathType: "Prefix"
+			}]
+		}]
+		tls: [{
+			hosts: ["vaultwarden.ocf.berkeley.edu"]
+			secretName: "vaultwarden-tls"
+		}]
+	}
+}

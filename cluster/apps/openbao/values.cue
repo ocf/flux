@@ -1,0 +1,102 @@
+package kube
+
+import "encoding/yaml"
+
+toplevel: configMap: "openbao-values": {
+	apiVersion: "v1"
+	kind:       "ConfigMap"
+	metadata: {
+		name:      "openbao-values"
+		namespace: "openbao"
+		labels: "reconcile.fluxcd.io/watch": "Enabled"
+	}
+	data: {
+		"values.yaml": yaml.Marshal(_cue_values_yaml)
+		let _cue_values_yaml = {
+			global: {
+				enabled: true
+				// TODO get TLS working if possible
+				tlsDisable: true
+			}
+			server: {
+				//extraEnvironmentVars:
+				//  OPENBAO_CACERT: /openbao/tls/openbao.ca
+				ingress: {
+					enabled:     true
+					annotations: yaml.Marshal(_cue_annotations)
+					let _cue_annotations = {
+						"cert-manager.io/cluster-issuer":           "letsencrypt"
+						"ingress.kubernetes.io/force-ssl-redirect": "true"
+						"kubernetes.io/tls-acme":                   "true"
+					}
+					hosts: [{
+						host: "openbao.ocf.berkeley.edu"
+						paths: []
+					}, {
+						host: "bao.ocf.berkeley.edu"
+						paths: []
+					}]
+					tls: [{
+						secretName: "openbao-ingress-tls"
+						hosts: [
+							"openbao.ocf.berkeley.edu",
+							"bao.ocf.berkeley.edu",
+						]
+					}]
+				}
+				//volumes:
+				//  - name: openbao-server-tls
+				//    secret:
+				//      defaultMode: 420
+				//      secretName: openbao-server-tls
+				//volumeMounts:
+				//  - mountPath: /openbao/tls
+				//    name: openbao-server-tls
+				//    readOnly: true
+				standalone: {
+					enabled: false
+				}
+				ha: {
+					enabled:  true
+					replicas: 3
+					raft: {
+						enabled: true
+						//config: |
+						//  ui = true
+						//
+						//  listener "tcp" {
+						//    tls_disable = 0
+						//    address = "[::]:8200"
+						//    cluster_address = "[::]:8201"
+						//    tls_cert_file = "/openbao/tls/openbao.crt"
+						//    tls_key_file = "/openbao/tls/openbao.key"
+						//    tls_client_ca_file = "/openbao/tls/openbao.ca"
+						//  }
+						//
+						//  storage "raft" {
+						//    path = "/openbao/data"
+						//      retry_join {
+						//        leader_api_addr = "https://openbao-active:8200"
+						//        leader_client_cert_file = "/openbao/tls/openbao.crt"
+						//        leader_client_key_file = "/openbao/tls/openbao.key"
+						//        leader_ca_cert_file = "/openbao/tls/openbao.ca"
+						//      }
+						//  }
+						//
+						//  service_registration "kubernetes" {}
+						setNodeId: true
+					}
+				}
+			}
+			service: auditStorage: {
+				enabled:      true
+				storageClass: "rbd-nvme"
+			}
+			injector: enabled: false
+			ui: {
+				enabled:     true
+				serviceType: "LoadBalancer"
+			}
+			serverTelemetry: serviceMonitor: enabled: true
+		}, }
+}

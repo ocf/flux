@@ -1,0 +1,19 @@
+package kube
+
+toplevel: kustomization: overrides: {
+	apiVersion: "kustomize.toolkit.fluxcd.io/v1"
+	kind:       "Kustomization"
+	metadata: {
+		name:      "overrides"
+		namespace: "flux-system"
+	}
+	spec: {
+		interval: "10m0s"
+		path:     "./cluster/infra/overrides/staging"
+		prune:    true
+		sourceRef: {
+			kind: "GitRepository"
+			name: "cluster"
+		}
+	}
+}

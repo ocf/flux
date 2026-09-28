@@ -1,0 +1,33 @@
+package kube
+
+import "encoding/yaml"
+
+toplevel: kustomization: apps: {
+	apiVersion: "kustomize.toolkit.fluxcd.io/v1"
+	kind:       "Kustomization"
+	metadata: {
+		name:      "apps"
+		namespace: "flux-system"
+	}
+	spec: {
+		interval: "10m0s"
+		path:     "./cluster/apps"
+		prune:    true
+		sourceRef: {
+			kind: "GitRepository"
+			name: "cluster"
+		}
+		patches: [{
+			target: kind: "Ingress"
+			patch: yaml.Marshal(_cue_patch)
+			let _cue_patch = {
+				apiVersion: "networking.k8s.io/v1"
+				kind:       "Ingress"
+				metadata: {
+					name: "ignored"
+					annotations: "cert-manager.io/cluster-issuer": "letsencrypt"
+				}
+			}
+		}]
+	}
+}

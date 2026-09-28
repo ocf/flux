@@ -1,0 +1,22 @@
+package kube
+
+toplevel: certificate: "o3-ocf-crt": {
+	apiVersion: "cert-manager.io/v1"
+	kind:       "Certificate"
+	metadata: {
+		name:      "o3-ocf-crt"
+		namespace: "rook"
+	}
+	spec: {
+		dnsNames: [
+			"o3.ocf.io",
+			"o3.ocf.berkeley.edu",
+		]
+		issuerRef: {
+			group: "cert-manager.io"
+			kind:  "ClusterIssuer"
+			name:  "letsencrypt"
+		}
+		secretName: "o3-ocf-crt"
+	}
+}

@@ -1,0 +1,33 @@
+package kube
+
+toplevel: imageUpdateAutomation: prod: {
+	apiVersion: "image.toolkit.fluxcd.io/v1"
+	kind:       "ImageUpdateAutomation"
+	metadata: {
+		name:      "prod"
+		namespace: "flux-system"
+	}
+	spec: {
+		git: {
+			checkout: ref: branch: "main"
+			commit: {
+				author: {
+					email: "ocfbot@ocf.berkeley.edu"
+					name:  "ocfbot"
+				}
+				messageTemplate: "{{println \"flux image update automation\"}}{{range .Changed.Changes}}{{.Setter}}: {{print .OldValue}} -> {{println .NewValue}}{{end}}"
+				signingKey: {
+					secretRef: name: "automation-signing-key"
+					type: "ssh"
+				}
+			}
+			push: branch: "automation"
+		}
+		interval: "30m0s"
+		sourceRef: {
+			kind:      "GitRepository"
+			name:      "cluster"
+			namespace: "flux-system"
+		}
+	}
+}

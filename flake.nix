@@ -26,6 +26,9 @@
             sops
             age
             age-plugin-yubikey
+
+            cue
+            go
           ];
 
           shellHook = ''

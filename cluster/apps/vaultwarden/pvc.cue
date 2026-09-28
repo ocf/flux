@@ -1,0 +1,15 @@
+package kube
+
+toplevel: persistentVolumeClaim: "vaultwarden-data": {
+	apiVersion: "v1"
+	kind:       "PersistentVolumeClaim"
+	metadata: {
+		name:      "vaultwarden-data"
+		namespace: "vaultwarden"
+	}
+	spec: {
+		accessModes: ["ReadWriteOnce"]
+		resources: requests: storage: "8Gi"
+		storageClassName: "rbd-nvme"
+	}
+}

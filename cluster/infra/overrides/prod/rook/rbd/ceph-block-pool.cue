@@ -1,0 +1,18 @@
+package kube
+
+toplevel: cephBlockPool: "rbd-nvme": {
+	apiVersion: "ceph.rook.io/v1"
+	kind:       "CephBlockPool"
+	metadata: {
+		name:      "rbd-nvme"
+		namespace: "rook"
+	}
+	spec: {
+		deviceClass:   "nvme"
+		failureDomain: "host"
+		replicated: {
+			requireSafeReplicaSize: true
+			size:                   3
+		}
+	}
+}

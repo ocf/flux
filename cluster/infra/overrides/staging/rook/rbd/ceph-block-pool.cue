@@ -1,0 +1,18 @@
+package kube
+
+toplevel: cephBlockPool: "rbd-ssd": {
+	apiVersion: "ceph.rook.io/v1"
+	kind:       "CephBlockPool"
+	metadata: {
+		name:      "rbd-ssd"
+		namespace: "rook"
+	}
+	spec: {
+		deviceClass:   "ssd"
+		failureDomain: "host"
+		replicated: {
+			requireSafeReplicaSize: true
+			size:                   3
+		}
+	}
+}

@@ -1,0 +1,49 @@
+package kube
+
+toplevel: gitRepository: "snapshot-controller": {
+	apiVersion: "source.toolkit.fluxcd.io/v1"
+	kind:       "GitRepository"
+	metadata: {
+		name:      "snapshot-controller"
+		namespace: "flux-system"
+	}
+	spec: {
+		interval: "15m0s"
+		ref: tag: "v8.6.0"
+		url: "https://github.com/kubernetes-csi/external-snapshotter.git/"
+	}
+}
+toplevel: kustomization: "snapshot-controller-crds": {
+	apiVersion: "kustomize.toolkit.fluxcd.io/v1"
+	kind:       "Kustomization"
+	metadata: {
+		name:      "snapshot-controller-crds"
+		namespace: "flux-system"
+	}
+	spec: {
+		interval: "10m0s"
+		path:     "./client/config/crd"
+		prune:    true
+		sourceRef: {
+			kind: "GitRepository"
+			name: "snapshot-controller"
+		}
+	}
+}
+toplevel: kustomization: "snapshot-controller": {
+	apiVersion: "kustomize.toolkit.fluxcd.io/v1"
+	kind:       "Kustomization"
+	metadata: {
+		name:      "snapshot-controller"
+		namespace: "flux-system"
+	}
+	spec: {
+		interval: "10m0s"
+		path:     "./deploy/kubernetes/snapshot-controller"
+		prune:    true
+		sourceRef: {
+			kind: "GitRepository"
+			name: "snapshot-controller"
+		}
+	}
+}

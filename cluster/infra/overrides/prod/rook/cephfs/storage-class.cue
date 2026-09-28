@@ -1,0 +1,38 @@
+package kube
+
+toplevel: storageClass: "cephfs-hdd": {
+	apiVersion: "storage.k8s.io/v1"
+	kind:       "StorageClass"
+	metadata: name: "cephfs-hdd"
+	parameters: {
+		clusterID:                                               "rook"
+		"csi.storage.k8s.io/controller-expand-secret-name":      "rook-csi-cephfs-provisioner"
+		"csi.storage.k8s.io/controller-expand-secret-namespace": "rook"
+		"csi.storage.k8s.io/node-stage-secret-name":             "rook-csi-cephfs-node"
+		"csi.storage.k8s.io/node-stage-secret-namespace":        "rook"
+		"csi.storage.k8s.io/provisioner-secret-name":            "rook-csi-cephfs-provisioner"
+		"csi.storage.k8s.io/provisioner-secret-namespace":       "rook"
+		fsName:                                                  "cephfs-hybrid"
+		pool:                                                    "cephfs-hybrid-hdd"
+	}
+	provisioner:   "rook.cephfs.csi.ceph.com"
+	reclaimPolicy: "Delete"
+}
+toplevel: storageClass: "cephfs-nvme": {
+	apiVersion: "storage.k8s.io/v1"
+	kind:       "StorageClass"
+	metadata: name: "cephfs-nvme"
+	parameters: {
+		clusterID:                                               "rook"
+		"csi.storage.k8s.io/controller-expand-secret-name":      "rook-csi-cephfs-provisioner"
+		"csi.storage.k8s.io/controller-expand-secret-namespace": "rook"
+		"csi.storage.k8s.io/node-stage-secret-name":             "rook-csi-cephfs-node"
+		"csi.storage.k8s.io/node-stage-secret-namespace":        "rook"
+		"csi.storage.k8s.io/provisioner-secret-name":            "rook-csi-cephfs-provisioner"
+		"csi.storage.k8s.io/provisioner-secret-namespace":       "rook"
+		fsName:                                                  "cephfs-hybrid"
+		pool:                                                    "cephfs-hybrid-nvme"
+	}
+	provisioner:   "rook.cephfs.csi.ceph.com"
+	reclaimPolicy: "Delete"
+}

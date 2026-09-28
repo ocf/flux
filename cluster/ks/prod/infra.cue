@@ -1,0 +1,19 @@
+package kube
+
+toplevel: kustomization: infra: {
+	apiVersion: "kustomize.toolkit.fluxcd.io/v1"
+	kind:       "Kustomization"
+	metadata: {
+		name:      "infra"
+		namespace: "flux-system"
+	}
+	spec: {
+		interval: "10m0s"
+		path:     "./cluster/infra/manifests"
+		prune:    true
+		sourceRef: {
+			kind: "GitRepository"
+			name: "cluster"
+		}
+	}
+}

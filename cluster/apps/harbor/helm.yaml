@@ -48,7 +48,7 @@ spec:
       ingress:
         hosts:
           core: registry.ocf.berkeley.edu
-        annotations: |
+        annotations:
           cert-manager.io/cluster-issuer: letsencrypt
     externalURL: "https://registry.ocf.berkeley.edu"
     persistence:

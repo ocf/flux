@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mkdocs
+  namespace: mkdocs
+spec:
+  rules:
+  - host: bestdocs.ocf.berkeley.edu
+    http:
+      paths:
+      - backend:
+          service:
+            name: mkdocs
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - bestdocs.ocf.berkeley.edu
+    secretName: mkdocs-tls

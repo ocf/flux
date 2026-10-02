@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-values
+  namespace: keycloak
+data:
+  keycloak-values.yml: |
+    auth:
+      existingSecret: keycloak
+      existingSecretKey: admin-password
+    externalDatabase:
+      database: keycloak
+      existingSecret: keycloak.ocf-keycloak.credentials.postgresql.acid.zalan.do
+      existingSecretPasswordKey: password
+      host: ocf-keycloak
+      port: 5432
+      user: keycloak
+    extraVolumeMounts:
+    - mountPath: /etc/krb5.conf
+      name: krb5-conf
+      subPath: krb5.conf
+    - mountPath: /opt/bitnami/keycloak/themes/keywind
+      name: keycloak
+      subPath: themes/keywind/theme/keywind
+    extraVolumes:
+    - configMap:
+        name: krb5-conf
+      name: krb5-conf
+    - name: keycloak
+      persistentVolumeClaim:
+        claimName: keycloak
+    global:
+      security:
+        allowInsecureImages: true
+    httpRelativePath: /
+    image:
+      repository: bitnamilegacy/keycloak
+    ingress:
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        ingress.kubernetes.io/force-ssl-redirect: 'true'
+        kubernetes.io/tls-acme: 'true'
+      enabled: true
+      hostname: idm.ocf.berkeley.edu
+      ingressClassName: contour
+      tls: true
+    initContainers:
+    - args:
+      - mkdir -p /keycloak/themes/keywind && (git -C /keycloak/themes/keywind pull ||
+        git clone https://github.com/lukin/keywind /keycloak/themes/keywind)
+      command:
+      - /bin/sh
+      - -c
+      image: alpine/git
+      name: download-resources
+      volumeMounts:
+      - mountPath: /keycloak
+        name: keycloak
+    keycloakConfigCli:
+      cleanupAfterFinished:
+        enabled: false
+        seconds: 0
+      enabled: true
+      existingConfigmap: keycloak-config-cli
+      image:
+        repository: bitnamilegacy/keycloak-config-cli
+    metrics:
+      enabled: true
+    podAnnotations:
+      vault.hashicorp.com/agent-inject: 'true'
+      vault.hashicorp.com/agent-inject-secret-keytab: kvv2/data/keycloak/keycloak
+      vault.hashicorp.com/agent-inject-template-keytab: '{{`{{- with secret "kvv2/data/keycloak/keycloak"
+        -}}{{ base64Decode .Data.data.keytab }}{{- end}}`}}'
+      vault.hashicorp.com/role: keycloak
+      vault.hashicorp.com/service: https://vault.ocf.berkeley.edu/
+    postgresql:
+      enabled: false
+    production: true
+    proxy: edge
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 500m
+        memory: 4096Mi
+      requests:
+        cpu: 100m
+        memory: 2048Mi

@@ -15,7 +15,7 @@ spec:
               number: 80
         path: /
         pathType: Prefix
-  tls:
-  - hosts:
-    - staging-c.ocf.berkeley.edu
-    secretName: mkdocs-tls
+  # tls:
+  # - hosts:
+  #   - staging-c.ocf.berkeley.edu
+  #   secretName: mkdocs-tls

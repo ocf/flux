@@ -1,0 +1,23 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: decalweb
+  namespace: flux-system
+spec:
+  image: ghcr.io/ocf/ocf-docs
+  interval: 5m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: decalweb
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: decalweb
+  filterTags:
+    pattern: '^latest$'
+  policy:
+    alphabetical: {}
+  digestReflectionPolicy: Always
+  interval: 10m

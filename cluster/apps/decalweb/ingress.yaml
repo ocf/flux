@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: decalweb
+  namespace: decalweb
+spec:
+  rules:
+  - host: decal.ocf.berkeley.edu
+    http:
+      paths:
+      - backend:
+          service:
+            name: decalweb
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - decal.ocf.berkeley.edu
+    secretName: decalweb-tls

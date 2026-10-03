@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: decalweb
+  namespace: decalweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ocf.berkeley.edu/flux: decalweb
+  template:
+    metadata:
+      labels:
+        ocf.berkeley.edu/flux: decalweb
+    spec:
+      containers:
+      - image: ghcr.io/ocf/decalweb:latest # {"$imagepolicy": "flux-system:decalweb"}
+        imagePullPolicy: IfNotPresent
+        name: main
+        ports:
+        - containerPort: 80
+      dnsConfig:
+        searches:
+        - ocf.berkeley.edu
+      dnsPolicy: ClusterFirst

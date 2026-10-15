@@ -5,7 +5,7 @@ metadata:
   namespace: mkdocs
 spec:
   rules:
-  - host: docs.ocf.berkeley.edu
+  - host: staging-b.ocf.berkeley.edu
     http:
       paths:
       - backend:
@@ -15,7 +15,7 @@ spec:
               number: 80
         path: /
         pathType: Prefix
-  - host: bestdocs.ocf.berkeley.edu
+  - host: staging-c.ocf.berkeley.edu
     http:
       paths:
       - backend:
@@ -25,8 +25,3 @@ spec:
               number: 80
         path: /
         pathType: Prefix
-  tls:
-  - hosts:
-    - docs.ocf.berkeley.edu
-    - bestdocs.ocf.berkeley.edu
-    secretName: mkdocs-tls

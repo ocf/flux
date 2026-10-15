@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: templates
+  namespace: templates
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ocf.berkeley.edu/flux: templates
+  template:
+    metadata:
+      labels:
+        ocf.berkeley.edu/flux: templates
+    spec:
+      containers:
+      - image: ghcr.io/ocf/templates:latest@sha256:2bff19ed6cb99a566eb2c4415052d806dc81c97d9812943283a0ea4bba9bfc38 # {"$imagepolicy": "flux-system:templates"}
+        imagePullPolicy: IfNotPresent
+        name: main
+        ports:
+        - containerPort: 3000

@@ -1,44 +1,20 @@
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageRepository
 metadata:
-  name: labmap-backend
+  name: labmap
   namespace: flux-system
 spec:
-  image: ghcr.io/ocf/labmap2-backend
+  image: ghcr.io/ocf/labmap2
   interval: 5m0s
 ---
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImagePolicy
 metadata:
-  name: labmap-backend
+  name: labmap
   namespace: flux-system
 spec:
   imageRepositoryRef:
-    name: labmap-backend
-  filterTags:
-    pattern: '^latest$'
-  policy:
-    alphabetical: {}
-  digestReflectionPolicy: Always
-  interval: 10m
----
-apiVersion: image.toolkit.fluxcd.io/v1
-kind: ImageRepository
-metadata:
-  name: labmap-frontend
-  namespace: flux-system
-spec:
-  image: ghcr.io/ocf/labmap2-frontend
-  interval: 5m0s
----
-apiVersion: image.toolkit.fluxcd.io/v1
-kind: ImagePolicy
-metadata:
-  name: labmap-frontend
-  namespace: flux-system
-spec:
-  imageRepositoryRef:
-    name: labmap-frontend
+    name: labmap
   filterTags:
     pattern: '^latest$'
   policy:

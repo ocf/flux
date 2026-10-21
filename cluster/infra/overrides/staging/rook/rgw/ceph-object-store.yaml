@@ -1,0 +1,18 @@
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStore
+metadata:
+  name: rgw-ssd
+  namespace: rook
+spec:
+  metadataPool:
+    failureDomain: host
+    replicated:
+      size: 3
+  dataPool:
+    failureDomain: host
+    replicated:
+      size: 3
+  gateway:
+    instances: 1
+    port: 80
+  preservePoolsOnDelete: true

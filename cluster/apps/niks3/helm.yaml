@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: niks3
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: niks3
+  namespace: niks3
+spec:
+  url: oci://ghcr.io/mic92/charts/niks3
+  interval: 10m
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: niks3
+  namespace: niks3
+spec:
+  interval: 15m0s
+  timeout: 5m0s
+  chart:
+    spec:
+      chart: niks3
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: niks3
+      version: v1.15.0
+  releaseName: niks3
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+  values:
+    database:
+      existingSecret: niks3-pg-app
+    s3:
+      endpoint: s3.eu-central-1.amazonaws.com
+      bucket: my-nix-cache
+      # TODO  secrets
+    auth:
+      existingSecret: niks3-token    # key `token`, >= 36 chars
+    signing:
+      existingSecret: niks3-signing
+      keys: [cache.example.com-1]
+    cacheURL: https://cache.ocf.berkeley.edu
+    ingress:
+      enabled: true
+      className: nginx
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      hosts:
+        - host: niks3.ocf.berkeley.edu
+          paths: [{ path: /, pathType: Prefix }]

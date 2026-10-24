@@ -24,7 +24,7 @@ spec:
   chart:
     spec:
       chart: cilium
-      version: 1.20.1 # {"$imagepolicy": "flux-system:cilium:tag"}
+      version: 1.20.4 # {"$imagepolicy": "flux-system:cilium:tag"}
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository

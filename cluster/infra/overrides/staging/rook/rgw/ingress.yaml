@@ -10,7 +10,7 @@ spec:
       paths:
       - backend:
           service:
-            name: rook-rgw-rgw-ssd
+            name: rook-ceph-rgw-rgw-ssd
             port:
               number: 80
         path: /

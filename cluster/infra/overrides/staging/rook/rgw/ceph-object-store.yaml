@@ -5,10 +5,12 @@ metadata:
   namespace: rook
 spec:
   metadataPool:
+    deviceClass: ssd
     failureDomain: host
     replicated:
       size: 3
   dataPool:
+    deviceClass: ssd
     failureDomain: host
     replicated:
       size: 3

@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: rgw-ssd
+parameters:
+  objectStoreName: rgw-ssd
+  objectStoreNamespace: rook
+provisioner: rook.ceph.rook.io/bucket
+reclaimPolicy: Delete

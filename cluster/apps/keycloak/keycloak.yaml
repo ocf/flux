@@ -1,0 +1,81 @@
+apiVersion: k8s.keycloak.org/v2beta1
+kind: Keycloak
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  # additional advanced keycloak configuration options, if needed
+  # https://www.keycloak.org/operator/advanced-configuration#_server_configuration_details
+  # https://www.keycloak.org/server/all-config
+  #additionalOptions:
+  
+  # bootstrap an admin user from a secret for emergencies
+  # https://www.keycloak.org/operator/advanced-configuration#_admin_bootstrapping
+  bootstrapAdmin:
+    user:
+      secret: keycloak-admin-secret
+
+  # configure postgres db credentials (managed by cnpg)
+  # https://www.keycloak.org/server/all-config#category-database
+  db:
+    vendor: postgres
+    usernameSecret:
+      name: postgres-cluster-app
+      key: username
+    passwordSecret:
+      name: postgres-cluster-app
+      key: password
+    host: postgres-cluster-rw
+    database: keycloak
+    port: 5432
+
+  # environment variables to pass to keycloak, if needed
+  #env:
+  
+  # keycloak features to enable/disable
+  # https://www.keycloak.org/server/features
+  features:
+    enabled:
+      - client-admin-api:v2
+
+  # keycloak hostname configuration
+  # https://www.keycloak.org/server/hostname
+  hostname:
+    strict: false
+
+  http: # TODO need to figure out ingress conf also
+    tlsSecret: keycloak-tls-secret
+  
+  ingress:
+    enabled: false
+
+  instances: 1 # default is 1. should be HA if there isnt additional config needed, though
+
+  # we should perhaps build custom images for keycloak for optimization purposes?
+  # unsure how worth it the infra overhead is worth for a faster startup
+  # https://www.keycloak.org/operator/customizing-keycloak#_best_practice
+  #startOptimized
+  
+  # opentelemetry configuration, potentially useful in the future
+  #telemetry:
+  #tracing
+
+  # keycloak update configuration
+  # https://www.keycloak.org/operator/rolling-updates
+  update:
+    strategy: Auto
+
+  # lol lmao
+  # TODO idk if this is ideal
+  unsupported:
+    podTemplate:
+      spec:
+        containers:
+          - volumeMounts:
+              - name: keytab
+                readOnly: true
+                mountPath: /run/secrets/keycloak
+        volumes:
+          - name: keytab
+            secret:
+              secretName: keytab

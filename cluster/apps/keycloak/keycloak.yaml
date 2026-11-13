@@ -46,6 +46,7 @@ spec:
     strict: false
 
   http: # TODO need to figure out ingress conf also
+    httpEnabled: true
     tlsSecret: keycloak-tls-secret
   
   ingress:

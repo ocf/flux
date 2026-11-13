@@ -82,7 +82,7 @@ spec:
     image:
       tag: "6.5.1-21.1.2"
     env:
-      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_URL: http://keycloak-service:8080
       KEYCLOAK_USER: ocf-admin
       IMPORT_PATH: /config/
     existingSecret: keycloak-admin-secret

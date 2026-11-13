@@ -1,0 +1,13 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: KeycloakOIDCClient
+metadata:
+  name: oidc-test
+  namespace: keycloak
+spec:
+  keycloakCRName: keycloak
+  realm: ocf
+  client:
+    loginFlows:
+      - STANDARD
+    redirectUris:
+      - "https://reef.ocf.berkeley.edu:8006/*"

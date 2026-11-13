@@ -52,7 +52,7 @@ spec:
   ingress:
     enabled: false
 
-  instances: 1 # default is 1. should be HA if there isnt additional config needed, though
+  instances: 3 # default is 1. should be HA if there isnt additional config needed, though
 
   # we should perhaps build custom images for keycloak for optimization purposes?
   # unsure how worth it the infra overhead is worth for a faster startup

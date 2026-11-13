@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    ingress.cilium.io/tls-passthrough: enabled
+  name: keycloak-ingress
+  namespace: keycloak
+spec:
+  rules:
+  - host: idm.ocf.berkeley.edu
+    http:
+      paths:
+      - backend:
+          service:
+            name: keycloak-service
+            port:
+              name: https
+        pathType: Prefix
+        path: /
+  tls:
+  - hosts:
+    - idm.ocf.berkeley.edu
+    secretName: keycloak-tls-secret

@@ -1,0 +1,46 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: postgres-cluster
+  namespace: keycloak
+spec:
+  interval: 15m0s
+  timeout: 5m0s
+  chart:
+    spec:
+      chart: cluster
+      version: 0.9.0
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: postgres
+        namespace: postgres
+  releaseName: postgres-cluster
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+  values:
+    cluster:
+      storage:
+        storageClass: "rbd-nvme"
+
+      resources:
+        limits:
+          cpu: 2000m
+          memory: 8Gi
+        requests:
+          cpu: 2000m
+          memory: 8Gi
+      
+      affinity:
+
+      enableSuperuserAccess: false
+
+      initdb:
+        database: keycloak
+        owner: keycloak

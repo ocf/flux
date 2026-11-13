@@ -1,0 +1,20 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: keycloak
+  namespace: flux-system
+spec:
+  image: oci://quay.io/keycloak/keycloak-operator-helm
+  interval: 5m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: keycloak
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: keycloak
+  policy:
+    semver:
+      range: '>=1.0.0'

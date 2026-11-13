@@ -14,6 +14,8 @@ spec:
   bootstrapAdmin:
     user:
       secret: keycloak-admin
+    service:
+      secret: keycloak-admin
 
   # configure postgres db credentials (managed by cnpg)
   # https://www.keycloak.org/server/all-config#category-database

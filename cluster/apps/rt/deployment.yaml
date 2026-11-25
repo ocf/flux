@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rt
+  namespace: rt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ocf.berkeley.edu/flux: rt
+  template:
+    metadata:
+      labels:
+        ocf.berkeley.edu/flux: rt
+    spec:
+      containers:
+      - env:
+        - name: SERVER_NAME
+          value: rt.ocf.berkeley.edu
+        envFrom:
+        - secretRef:
+            name: keycloak-env
+        image: ghcr.io/ocf/rt:latest@sha256:957bed68584da83acce545d5b1d7de22487479c96bf4c63033eba8071664412d # {"$imagepolicy": "flux-system:rt"}
+        imagePullPolicy: IfNotPresent
+        name: main
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /opt/share/secrets/rt
+          name: secrets
+      dnsConfig:
+        searches:
+        - ocf.berkeley.edu
+      dnsPolicy: ClusterFirst
+      volumes:
+      - name: secrets
+        secret:
+          secretName: secret
